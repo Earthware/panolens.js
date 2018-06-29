@@ -2415,7 +2415,7 @@ GSVPANO.PanoLoader = function (parameters) {
      * Data Image Source
      * @type {String}
      */
-    PANOLENS.DataImageSource = 'https://pchen66.github.io/Panolens/asset/icon/';
+    PANOLENS.DataImageSource = '../asset/icon/';
 
     /**
      * Data Image
@@ -2494,6 +2494,10 @@ GSVPANO.PanoLoader = function (parameters) {
 		return window ? 'ontouchstart' in window || window.navigator.msMaxTouchPoints : false;
 
 	};
+
+	PANOLENS.Utils.checkIsIE10 = function(){
+		return document.documentMode != undefined && document.documentMode < 11;
+	}
 
 })();;(function(){
 	
@@ -3437,8 +3441,13 @@ PANOLENS.StereographicShader = {
 
 		radius = radius || 5000;
 
+		// infospots in IE10 clip with the radius of a sphere so make it slightly larger
+		if(PANOLENS.Utils.checkIsIE10()){
+			radius = radius * 1.1;
+		}
+
 		var geometry = new THREE.SphereGeometry( radius, 60, 40 ),
-			material = new THREE.MeshBasicMaterial( { opacity: 0, transparent: true } );
+			material = new THREE.MeshBasicMaterial( { opacity: 0, transparent: true, overdraw: PANOLENS.Utils.checkIsIE10() || false } );
 
 		PANOLENS.Panorama.call( this, geometry, material );
 
@@ -3982,7 +3991,7 @@ PANOLENS.StereographicShader = {
 	 */
 	PANOLENS.VideoPanorama.prototype.setVideoCurrentTime = function ( event ) {
 
-		if ( this.videoRenderObject && this.videoRenderObject.video && !Number.isNaN(event.percentage) && event.percentage !== 1 ) {
+		if ( this.videoRenderObject && this.videoRenderObject.video && !(typeof(event.percentage) === 'number' && isNaN(event.percentage)) && event.percentage !== 1 ) {
 
 			this.videoRenderObject.video.currentTime = this.videoRenderObject.video.duration * event.percentage;
 
@@ -6582,7 +6591,7 @@ PANOLENS.StereographicShader = {
 
 		this.animated = animated !== undefined ? animated : true;
 		this.isHovering = false;
-		this.visible = false;
+		this.visible = true;
 
 		this.element;
 		this.toPanorama;
@@ -6604,12 +6613,13 @@ PANOLENS.StereographicShader = {
 		function postLoad ( texture ) {
 
 			texture.wrapS = THREE.RepeatWrapping;
-			texture.repeat.x = - 1;
+			if(!PANOLENS.Utils.checkIsIE10()) texture.repeat.x = - 1;
 
 			texture.image.width = texture.image.naturalWidth || 64;
 			texture.image.height = texture.image.naturalHeight || 64;
 
 			ratio = texture.image.width / texture.image.height;
+			scope.material.overdraw = PANOLENS.Utils.checkIsIE10();
 			scope.scale.set( ratio * scale, scale, 1 );
 
 			startScale = scope.scale.clone();
@@ -6626,7 +6636,6 @@ PANOLENS.StereographicShader = {
 			scope.material.map = texture;
 			scope.material.depthTest = false;
 			scope.material.needsUpdate = true;
-
 		}
 
 		function show () {
@@ -7079,7 +7088,9 @@ PANOLENS.StereographicShader = {
 			this.showAnimation && this.showAnimation.delay( delay ).start();
 
 		}
-
+		else{
+			this.opacity = 1;
+		}
 	};
 
 	/**
@@ -7096,7 +7107,9 @@ PANOLENS.StereographicShader = {
 			this.hideAnimation && this.hideAnimation.delay( delay ).start();
 
 		}
-		
+		else{
+			this.opacity = 0;
+		}
 		
 	};
 
@@ -7226,7 +7239,7 @@ PANOLENS.StereographicShader = {
 
 		this.camera = options.camera || new THREE.PerspectiveCamera( this.options.cameraFov, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
 		this.scene = options.scene || new THREE.Scene();
-		this.renderer = options.renderer || new THREE.WebGLRenderer( { alpha: true, antialias: false } );
+		this.renderer = options.renderer || PANOLENS.Utils.checkIsIE10() ? new THREE.CanvasRenderer() : new THREE.WebGLRenderer( { alpha: true, antialias: false } );
 
 		this.viewIndicatorSize = options.indicatorSize;
 
