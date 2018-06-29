@@ -253,7 +253,7 @@
 	 */
 	PANOLENS.VideoPanorama.prototype.setVideoCurrentTime = function ( event ) {
 
-		if ( this.videoRenderObject && this.videoRenderObject.video && !Number.isNaN(event.percentage) && event.percentage !== 1 ) {
+		if ( this.videoRenderObject && this.videoRenderObject.video && !(typeof(event.percentage) === 'number' && isNaN(event.percentage)) && event.percentage !== 1 ) {
 
 			this.videoRenderObject.video.currentTime = this.videoRenderObject.video.duration * event.percentage;
 

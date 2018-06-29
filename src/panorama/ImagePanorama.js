@@ -12,8 +12,13 @@
 
 		radius = radius || 5000;
 
+		// infospots in IE10 clip with the radius of a imagepanorama's sphere so make it slightly larger
+		if(PANOLENS.Utils.checkIsIE10()){
+			radius = radius * 1.1;
+		}
+
 		var geometry = new THREE.SphereGeometry( radius, 60, 40 ),
-			material = new THREE.MeshBasicMaterial( { opacity: 0, transparent: true } );
+			material = new THREE.MeshBasicMaterial( { opacity: 0, transparent: true, overdraw: PANOLENS.Utils.checkIsIE10() || false } );
 
 		PANOLENS.Panorama.call( this, geometry, material );
 

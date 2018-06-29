@@ -79,7 +79,7 @@
 
 		this.camera = options.camera || new THREE.PerspectiveCamera( this.options.cameraFov, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
 		this.scene = options.scene || new THREE.Scene();
-		this.renderer = options.renderer || new THREE.WebGLRenderer( { alpha: true, antialias: false } );
+		this.renderer = options.renderer || PANOLENS.Utils.checkIsIE10() ? new THREE.CanvasRenderer() : new THREE.WebGLRenderer( { alpha: true, antialias: false } );
 
 		this.viewIndicatorSize = options.indicatorSize;
 

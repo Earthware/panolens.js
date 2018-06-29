@@ -21,7 +21,7 @@
 
 		this.animated = animated !== undefined ? animated : true;
 		this.isHovering = false;
-		this.visible = false;
+		this.visible = true;
 
 		this.element;
 		this.toPanorama;
@@ -43,12 +43,13 @@
 		function postLoad ( texture ) {
 
 			texture.wrapS = THREE.RepeatWrapping;
-			texture.repeat.x = - 1;
+			if(!PANOLENS.Utils.checkIsIE10()) texture.repeat.x = - 1;
 
 			texture.image.width = texture.image.naturalWidth || 64;
 			texture.image.height = texture.image.naturalHeight || 64;
 
 			ratio = texture.image.width / texture.image.height;
+			scope.material.overdraw = PANOLENS.Utils.checkIsIE10();
 			scope.scale.set( ratio * scale, scale, 1 );
 
 			startScale = scope.scale.clone();
@@ -65,7 +66,6 @@
 			scope.material.map = texture;
 			scope.material.depthTest = false;
 			scope.material.needsUpdate = true;
-
 		}
 
 		function show () {

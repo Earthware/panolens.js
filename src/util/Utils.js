@@ -16,4 +16,8 @@
 
 	};
 
+	PANOLENS.Utils.checkIsIE10 = function(){
+		return document.documentMode != undefined && document.documentMode < 11;
+	}
+
 })();
