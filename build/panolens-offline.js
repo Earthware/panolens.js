@@ -3435,7 +3435,7 @@ PANOLENS.StereographicShader = {
 
 		radius = radius || 5000;
 
-		// infospots in IE10 clip with the radius of a sphere so make it slightly larger
+		// infospots in IE10 clip with the radius of a imagepanorama's sphere so make it slightly larger
 		if(PANOLENS.Utils.checkIsIE10()){
 			radius = radius * 1.1;
 		}
@@ -5390,13 +5390,15 @@ PANOLENS.StereographicShader = {
 	/**
 	 * Add control bar
 	 */
-	PANOLENS.Widget.prototype.addControlBar = function () {
+	PANOLENS.Widget.prototype.addControlBar = function (controlBarPosition) {
 
 		if ( !this.container ) {
 
 			console.warn( 'Widget container not set' ); 
 			return; 
 		}
+
+		var showAtTop = controlBarPosition === 'top';
 
 		var scope = this, bar, styleTranslate, styleOpacity, gradientStyle;
 
@@ -5406,14 +5408,21 @@ PANOLENS.StereographicShader = {
 		bar.style.width = '100%';
 		bar.style.height = '44px';
 		bar.style.float = 'left';
-		bar.style.transform = bar.style.webkitTransform = bar.style.msTransform = 'translateY(-100%)';
-		bar.style.background = '-webkit-' + gradientStyle;
-		bar.style.background = '-moz-' + gradientStyle;
-		bar.style.background = '-o-' + gradientStyle;
-		bar.style.background = '-ms-' + gradientStyle;
-		bar.style.background = gradientStyle;
 		bar.style.transition = this.DEFAULT_TRANSITION;
 		bar.style.pointerEvents = 'none';
+		bar.style.position = 'absolute';
+		
+		if (showAtTop) {
+			bar.style.top = '0';
+		} else {
+			bar.style.transform = bar.style.webkitTransform = bar.style.msTransform = 'translateY(-100%)';
+			bar.style.background = '-webkit-' + gradientStyle;
+			bar.style.background = '-moz-' + gradientStyle;
+			bar.style.background = '-o-' + gradientStyle;
+			bar.style.background = '-ms-' + gradientStyle;
+			bar.style.background = gradientStyle;
+		}
+
 		bar.isHidden = false;
 		bar.toggle = function () {
 			bar.isHidden = !bar.isHidden;
@@ -7194,6 +7203,7 @@ PANOLENS.StereographicShader = {
 
 		options = options || {};
 		options.controlBar = options.controlBar !== undefined ? options.controlBar : true;
+		options.controlBarPosition = options.controlBarPosition !== undefined ? options.controlBarPosition : 'top';
 		options.controlButtons = options.controlButtons || [ 'fullscreen', 'setting', 'video' ];
 		options.autoHideControlBar = options.autoHideControlBar !== undefined ? options.autoHideControlBar : false;
 		options.autoHideInfospot = options.autoHideInfospot !== undefined ? options.autoHideInfospot : true;
@@ -7462,7 +7472,7 @@ PANOLENS.StereographicShader = {
 
 		this.widget = new PANOLENS.Widget( this.container );
 		this.widget.addEventListener( 'panolens-viewer-handler', this.eventHandler.bind( this ) );
-		this.widget.addControlBar();
+		this.widget.addControlBar(this.options.controlBarPosition);
 		array.forEach( function( buttonName ){
 
 			scope.widget.addControlButton( buttonName );

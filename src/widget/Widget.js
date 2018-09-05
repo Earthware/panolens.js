@@ -38,13 +38,15 @@
 	/**
 	 * Add control bar
 	 */
-	PANOLENS.Widget.prototype.addControlBar = function () {
+	PANOLENS.Widget.prototype.addControlBar = function (controlBarPosition) {
 
 		if ( !this.container ) {
 
 			console.warn( 'Widget container not set' ); 
 			return; 
 		}
+
+		var showAtTop = controlBarPosition === 'top';
 
 		var scope = this, bar, styleTranslate, styleOpacity, gradientStyle;
 
@@ -54,14 +56,21 @@
 		bar.style.width = '100%';
 		bar.style.height = '44px';
 		bar.style.float = 'left';
-		bar.style.transform = bar.style.webkitTransform = bar.style.msTransform = 'translateY(-100%)';
-		bar.style.background = '-webkit-' + gradientStyle;
-		bar.style.background = '-moz-' + gradientStyle;
-		bar.style.background = '-o-' + gradientStyle;
-		bar.style.background = '-ms-' + gradientStyle;
-		bar.style.background = gradientStyle;
 		bar.style.transition = this.DEFAULT_TRANSITION;
 		bar.style.pointerEvents = 'none';
+		bar.style.position = 'absolute';
+		
+		if (showAtTop) {
+			bar.style.top = '0';
+		} else {
+			bar.style.transform = bar.style.webkitTransform = bar.style.msTransform = 'translateY(-100%)';
+			bar.style.background = '-webkit-' + gradientStyle;
+			bar.style.background = '-moz-' + gradientStyle;
+			bar.style.background = '-o-' + gradientStyle;
+			bar.style.background = '-ms-' + gradientStyle;
+			bar.style.background = gradientStyle;
+		}
+
 		bar.isHidden = false;
 		bar.toggle = function () {
 			bar.isHidden = !bar.isHidden;
