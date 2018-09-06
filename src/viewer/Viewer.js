@@ -41,6 +41,7 @@
 		options = options || {};
 		options.controlBar = options.controlBar !== undefined ? options.controlBar : true;
 		options.controlBarPosition = options.controlBarPosition !== undefined ? options.controlBarPosition : 'top';
+		options.controlBarHeight = options.controlBarHeight !== undefined ? options.controlBarHeight : '44px';
 		options.controlButtons = options.controlButtons || [ 'fullscreen', 'setting', 'video' ];
 		options.autoHideControlBar = options.autoHideControlBar !== undefined ? options.autoHideControlBar : false;
 		options.autoHideInfospot = options.autoHideInfospot !== undefined ? options.autoHideInfospot : true;
@@ -309,7 +310,7 @@
 
 		this.widget = new PANOLENS.Widget( this.container );
 		this.widget.addEventListener( 'panolens-viewer-handler', this.eventHandler.bind( this ) );
-		this.widget.addControlBar(this.options.controlBarPosition);
+		this.widget.addControlBar(this.options.controlBarPosition, this.options.controlBarHeight);
 		array.forEach( function( buttonName ){
 
 			scope.widget.addControlButton( buttonName );

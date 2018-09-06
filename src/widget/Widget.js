@@ -38,7 +38,7 @@
 	/**
 	 * Add control bar
 	 */
-	PANOLENS.Widget.prototype.addControlBar = function (controlBarPosition) {
+	PANOLENS.Widget.prototype.addControlBar = function (controlBarPosition, controlBarHeight) {
 
 		if ( !this.container ) {
 
@@ -54,7 +54,7 @@
 
 		bar = document.createElement( 'div' );
 		bar.style.width = '100%';
-		bar.style.height = '44px';
+		bar.style.height = controlBarHeight || '44px';
 		bar.style.float = 'left';
 		bar.style.transition = this.DEFAULT_TRANSITION;
 		bar.style.pointerEvents = 'none';
