@@ -2415,7 +2415,7 @@ GSVPANO.PanoLoader = function (parameters) {
      * Data Image Source
      * @type {String}
      */
-    PANOLENS.DataImageSource = '../asset/icon/';
+    PANOLENS.DataImageSource = '../assets/icon/';
 
     /**
      * Data Image
