@@ -250,6 +250,10 @@
 
 	};
 
+	PANOLENS.Widget.prototype.removeMask = function () {
+		this.mask.parentElement.removeChild(this.mask);
+	};
+
 	PANOLENS.Widget.prototype.createMask = function () {
 
 		var element = document.createElement( 'div' );

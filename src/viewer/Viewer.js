@@ -1717,6 +1717,7 @@
 
 		this.container.style.backgroundColor = 'unset';
 		this.container.removeChild(this.renderer.domElement);
+		this.widget.removeMask();
 		this.removeViewIndicator();
 	};
 
