@@ -5615,7 +5615,7 @@ PANOLENS.StereographicShader = {
 
 	};
 
-	PANOLENS.Widget.prototype.removeControlBar = function () {
+	PANOLENS.Widget.prototype.removeMask = function () {
 		this.mask.parentElement.removeChild(this.mask);
 	};
 
@@ -8897,7 +8897,7 @@ PANOLENS.StereographicShader = {
 
 		this.container.style.backgroundColor = 'unset';
 		this.container.removeChild(this.renderer.domElement);
-		this.widget.removeControlBar();
+		this.widget.removeMask();
 		this.removeViewIndicator();
 	};
 
