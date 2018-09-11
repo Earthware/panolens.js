@@ -346,8 +346,9 @@
 	 * @param  {THREE.Vector3} position - The position of infospot which navigates to the pano
 	 * @param  {number} [imageScale=300] - Image scale of linked infospot
 	 * @param  {string} [imageSrc=PANOLENS.DataImage.Arrow] - The image source of linked infospot
+	 * @param  {string} [hoverElement=DOM element] - The image source of linked infospot
 	 */
-	PANOLENS.Panorama.prototype.link = function ( pano, position, imageScale, imageSrc ) {
+	PANOLENS.Panorama.prototype.link = function ( pano, position, imageScale, imageSrc, hoverElement ) {
 
 		var scope = this, spot, scale, img;
 
@@ -392,22 +393,28 @@
 
 		}
 
+		var linkClickFunction = function () {
+
+			/**
+			 * Viewer handler event
+			 * @type {object}
+			 * @event PANOLENS.Panorama#panolens-viewer-handler
+			 * @property {string} method - Viewer function name
+			 * @property {*} data - The argument to be passed into the method
+			 */
+			scope.dispatchEvent( { type : 'panolens-viewer-handler', method: 'setPanorama', data: pano } );
+
+		};
+
 		// Creates a new infospot
 		spot = new PANOLENS.Infospot( scale, img );
-        spot.position.copy( position );
+		spot.position.copy( position );
         spot.toPanorama = pano;
-        spot.addEventListener( 'click', function () {
-
-        	/**
-        	 * Viewer handler event
-        	 * @type {object}
-        	 * @event PANOLENS.Panorama#panolens-viewer-handler
-        	 * @property {string} method - Viewer function name
-        	 * @property {*} data - The argument to be passed into the method
-        	 */
-        	scope.dispatchEvent( { type : 'panolens-viewer-handler', method: 'setPanorama', data: pano } );
-
-        } );
+        spot.addEventListener( 'click', linkClickFunction );
+		if (hoverElement) {
+			spot.addHoverElement( hoverElement, 0 );
+			spot.element.addEventListener( 'click', linkClickFunction );
+		}
 
         this.linkedSpots.push( spot );
 
