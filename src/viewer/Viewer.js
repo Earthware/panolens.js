@@ -1703,10 +1703,21 @@
 	 */
 	PANOLENS.Viewer.prototype.destory = function () {
 
+		this.clearDOM();
 		this.dispose();
 		this.render();
 		window.cancelAnimationFrame( this.requestAnimationId );		
 
+	};
+
+	/**
+	 * Clears the DOM of 
+	 */
+	PANOLENS.Viewer.prototype.clearDOM = function () {
+
+		this.container.style.backgroundColor = 'unset';
+		this.container.removeChild(this.renderer.domElement);
+		this.removeViewIndicator();
 	};
 
 	/**
@@ -1809,6 +1820,13 @@
 
 		this.loadAsyncRequest( PANOLENS.DataImage.ViewIndicator, loadViewIndicator );
 
+	};
+
+	/**
+	 * View indicator in upper left
+	 * */
+	PANOLENS.Viewer.prototype.removeViewIndicator = function () {
+		this.container.removeChild(document.getElementById('panolens-view-indicator-container'));
 	};
 
 	/**
