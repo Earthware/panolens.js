@@ -5412,6 +5412,7 @@ PANOLENS.StereographicShader = {
 		gradientStyle = 'linear-gradient(bottom, rgba(0,0,0,0.2), rgba(0,0,0,0))';
 
 		bar = document.createElement( 'div' );
+		bar.classList.add('panolens-widget-bar');
 		bar.style.width = '100%';
 		bar.style.height = controlBarHeight || '44px';
 		bar.style.float = 'left';
